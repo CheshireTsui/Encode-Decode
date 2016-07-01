@@ -5,8 +5,9 @@ x.sort()
 print x
 for i in x: i[0] +=1
 print x
-l = ['a', 'b', 'c']
+l = ['a', 'b', 'c','d','e']
 print "".join(l)
+print l[0:3]
 print 2.743/100,'\n============'
 
 d = {'a':'aa', 'b':'bb'}

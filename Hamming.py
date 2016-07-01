@@ -88,9 +88,69 @@ def error_flag(output_file_name):
     f.close()
 
 
+def encode(code_table, input_file_name, output_file_name):
+    try:
+        # input code table and file which needs to be encoded
+        fcode = open(code_table,'r')
+        raw_table = fcode.readlines()
+        fcode.close()
+
+        fin = open(input_file_name, "r")
+        raw_file = fin.read()
+        fin.close()
+        # encode
+        code_table = dict()
+        for line in raw_table:
+            code_table[line[0:4]] = line[5:-1]
+
+        encoded_file = str()
+        for i in range(len(raw_file)/4):
+            encoded_file = encoded_file + code_table["".join(raw_file[4*i:4*i+4])]
+        # check, not necessary
+        print code_table
+        print encoded_file
+        # write output-file
+        f = open(output_file_name, "w+")
+        f.write(encoded_file)
+        f.close()
+
+    except Exception, e:
+        raise e
+
+
+def decode(code_table, input_file_name, output_file_name):
+    try:
+        # input code table and file which needs to be decoded
+        fcode = open(code_table,'r')
+        raw_table = fcode.readlines()
+        fcode.close()
+
+        fin = open(input_file_name, "r")
+        raw_file = fin.read()
+        fin.close()
+        # decode
+        code_table = dict()
+        for line in raw_table:
+            code_table[line[5:-1]] = line[0:4]
+
+        decoded_file = str()
+        for i in range(len(raw_file)/7):
+            decoded_file = decoded_file + code_table["".join(raw_file[7*i:7*i+7])]
+        # check, not necessary
+        print code_table
+        print decoded_file
+        # write output-file
+        f = open(output_file_name, "w+")
+        f.write(decoded_file)
+        f.close()
+
+    except Exception, e:
+        raise e
 
 
 #test if function is correct
 if __name__ == "__main__":
     error_flag("error_flag.txt")
-    make_code_table("hamming_table_ouy.txt")
+    make_code_table("hamming_table_out.txt")
+    encode("hamming_table_out.txt", "huffman_out.txt", "hamming_out.txt")
+    decode("hamming_table_out.txt", "hamming_out.txt", "hamming_decode_out.txt")
