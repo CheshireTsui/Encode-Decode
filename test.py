@@ -8,9 +8,12 @@ print x
 
 d = {'a':'aa', 'b':'bb'}
 for i in d: print i, d[i]
+print 'a' in d, 'aa' in d,'\n============'
 
 s="01234567"
 print s[2:-1],'\n============'
+
+print range(3),'\n============'
 
 import time
 print int(time.time())
