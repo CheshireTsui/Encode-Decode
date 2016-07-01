@@ -45,6 +45,7 @@ def make_code_table(input_file_name, output_file_name):
     except Exception, e:
         raise e
 
+
 # this function only support to encode characters who exist in code table
 def encode(code_table, input_file_name, output_file_name, mod_x):
     try:
@@ -79,6 +80,45 @@ def encode(code_table, input_file_name, output_file_name, mod_x):
 
     except Exception, e:
         raise e
+
+
+def efficiency(code_table, input_file_name):
+    from math import log, e
+    try:
+        # input code table and file which needs to be encoded
+        fcode = open(code_table,'r')
+        raw_table = fcode.readlines()
+        fcode.close()
+
+        fin = open(input_file_name, "r")
+        raw_file = fin.readlines()
+        fin.close()
+        
+        code_length = dict()
+        for line in raw_table:
+            code_length[line[0]] = len(line[2:-1])
+
+        code_frequency = dict()
+        for line in raw_file:
+            code_frequency[line[0]] = float(line[2:])/100
+        # average code length
+        average_code_length = float()
+        for i in code_length.keys():
+            average_code_length += code_length[i] * code_frequency[i]
+        # source entropy
+        source_entropy = float()
+        for i in code_frequency.keys():
+            source_entropy += -(code_frequency[i] * log(code_frequency[i]) / log(e))
+        # encode efficiency
+        encode_efficiency = source_entropy / average_code_length * 100
+        # check, not necessary
+        print "source entropy:", source_entropy
+        print "average code length:", average_code_length
+        print "encode efficiency:", encode_efficiency, "%"
+
+    except Exception, e:
+        raise e
+
 
 def decode(code_table, input_file_name, output_file_name):
     try:
@@ -117,3 +157,5 @@ if __name__ == "__main__":
     make_code_table("frequency.txt", "huffman_table_out.txt")
     encode("huffman_table_out.txt", "raw_file.txt", "huffman_out.txt", 4)
     decode("huffman_table_out.txt", "huffman_out.txt", "huffman_decode_out.txt")
+    print "================="
+    efficiency("huffman_table_out.txt", "frequency.txt")

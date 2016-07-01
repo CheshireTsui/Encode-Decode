@@ -5,8 +5,10 @@ x.sort()
 print x
 for i in x: i[0] +=1
 print x
+print 2.743/100,'\n============'
 
 d = {'a':'aa', 'b':'bb'}
+print d.keys()
 for i in d: print i, d[i]
 print 'a' in d, 'aa' in d,'\n============'
 
