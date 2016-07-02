@@ -4,24 +4,24 @@ import Huffman, Hamming, Channel
 
 #test if function is correct
 if __name__ == "__main__":
-	# Huffman is encoding XD
-    Huffman.make_code_table("frequency.txt", "huffman_table_out.txt")
-    Huffman.encode("huffman_table_out.txt", "raw_file.txt", "huffman_out.txt", 4)
+    # Huffman is encoding XD
+    Huffman.make_code_table("frequency.txt", "huffman_table.out")
+    Huffman.encode("huffman_table.out", "raw_file.txt", "huffman.out", 4)
     # Hamming is encoding ;D
     print "=====message with Hamming-coding====="
-    Hamming.error_flag("error_flag.txt")
-    Hamming.make_code_table("hamming_table_out.txt")
-    Hamming.encode("hamming_table_out.txt", "huffman_out.txt", "hamming_out.txt")
+    Hamming.error_flag("error_flag.out")
+    Hamming.make_code_table("hamming_table.out")
+    Hamming.encode("hamming_table.out", "huffman.out", "hamming.out")
     # message is in the channel
-    Channel.transmission("hamming_out.txt", "channel_out.txt")
+    Channel.transmission("hamming.out", "channel.out")
     # Hamming is decoding ;D
-    Hamming.decode("hamming_table_out.txt", "channel_out.txt", "hamming_decode_out_from_channel.txt")
+    Hamming.decode("hamming_table.out", "channel.out", "hamming_decode_out_from_channel.out", "error_flag.out")
     # Huffman is decoding XD
-    Huffman.decode("huffman_table_out.txt", "hamming_decode_out_from_channel.txt", "huffman_decode_out_from_channel.txt")
+    Huffman.decode("huffman_table.out", "hamming_decode_out_from_channel.out", "huffman_decode_out_from_channel.out")
     print "=====message *without* Hamming-coding====="
     # message is in the channel
-    Channel.transmission("hamming_out.txt", "channel_out.txt")
+    Channel.transmission("hamming.out", "channel.out")
     # Huffman is decoding XD
-    Huffman.decode("huffman_table_out.txt", "channel_out.txt", "huffman_decode_out_from_channel2.txt")
+    Huffman.decode("huffman_table.out", "channel.out", "huffman_decode_out_from_channel2.out")
     print "=====Huffman====="
-    Huffman.efficiency("huffman_table_out.txt", "frequency.txt")
+    Huffman.efficiency("huffman_table.out", "frequency.txt")

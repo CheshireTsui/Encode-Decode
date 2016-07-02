@@ -150,7 +150,7 @@ def check(character, code_table):
         raise e
 
 
-def decode(code_table, input_file_name, output_file_name):
+def decode(code_table, input_file_name, output_file_name, error_flag):
     mark = str()
     try:
         # input code table and file which needs to be decoded
@@ -168,8 +168,8 @@ def decode(code_table, input_file_name, output_file_name):
 
         decoded_file = str()
         for i in range(len(raw_file)/7):
-            mark = "".join(raw_file[7*i:7*i+7]) + "\n" + check("".join(raw_file[7*i:7*i+7]), "error_flag.txt")
-            decoded_file = decoded_file + code_table[check("".join(raw_file[7*i:7*i+7]), "error_flag.txt")]
+            mark = "".join(raw_file[7*i:7*i+7]) + "\n" + check("".join(raw_file[7*i:7*i+7]), error_flag)
+            decoded_file = decoded_file + code_table[check("".join(raw_file[7*i:7*i+7]), error_flag)]
         # check, not necessary
         # print code_table
         # print decoded_file
