@@ -44,12 +44,11 @@ def make_code_table(output_file_name):
                 num = 0
                 for k in range(len(G)):
                     if(X[i][k]==G[k][j])and(X[i][k]!=0) : 
-                        num = 1
-                        break
-                ci = ci + str(num)
+                        num += 1
+                ci = ci + str(num % 2)
             C.append(ci)
         # check, not necessary
-        for line in C: print line
+        # for line in C: print line
         # write output-file
         fout = open(output_file_name, "w+")
         for i in range(len(C)):
@@ -72,14 +71,14 @@ def error_flag(output_file_name):
             num = 0
             for k in range(len(E)):
                 if(E[i][k]==H[j][k])and(E[i][k]!=0) : 
-                    num = 1
-                    break
-            si = si + str(num)
+                    num += 1
+            si = si + str(num % 2)
         S.append(si)
     # check, not necessary
-    for line in S: print line
+    # for line in S: print line
     # write output-file
     f = open(output_file_name, "w+")
+    f.write("000 0000000\n")
     for i in range(len(E)):
         s2 = str()
         for j in range(len(E)):
@@ -107,8 +106,8 @@ def encode(code_table, input_file_name, output_file_name):
         for i in range(len(raw_file)/4):
             encoded_file = encoded_file + code_table["".join(raw_file[4*i:4*i+4])]
         # check, not necessary
-        print code_table
-        print encoded_file
+        # print code_table
+        # print encoded_file
         # write output-file
         f = open(output_file_name, "w+")
         f.write(encoded_file)
@@ -118,7 +117,41 @@ def encode(code_table, input_file_name, output_file_name):
         raise e
 
 
+def check(character, code_table):
+    try:
+        # input code table and character which needs to be checked
+        fcode = open(code_table,'r')
+        raw_table = fcode.readlines()
+        fcode.close()
+
+        ri = list(character)
+
+        si = str()
+        for i in range(len(H)):
+            tmp = 0
+            for j in range(len(ri)):
+                if (ri[j]==str(H[i][j]))and(ri[j]=="1"):
+                    tmp += 1
+            si = si + str(tmp % 2)
+
+        # check
+        code_table = dict()
+        for line in raw_table:
+            code_table[line[0:3]] = line[4:-1]
+
+        ei = code_table[si]
+        # print "A", si, ei, "".join(ri)
+        for i in range(len(ei)):
+            ri[i] = str(int(ei[i]) ^ int(ri[i]))
+        # print "B", si, ei, "".join(ri)
+        return "".join(ri)
+
+    except Exception, e:
+        raise e
+
+
 def decode(code_table, input_file_name, output_file_name):
+    mark = str()
     try:
         # input code table and file which needs to be decoded
         fcode = open(code_table,'r')
@@ -135,16 +168,21 @@ def decode(code_table, input_file_name, output_file_name):
 
         decoded_file = str()
         for i in range(len(raw_file)/7):
-            decoded_file = decoded_file + code_table["".join(raw_file[7*i:7*i+7])]
+            mark = "".join(raw_file[7*i:7*i+7]) + "\n" + check("".join(raw_file[7*i:7*i+7]), "error_flag.txt")
+            decoded_file = decoded_file + code_table[check("".join(raw_file[7*i:7*i+7]), "error_flag.txt")]
         # check, not necessary
-        print code_table
-        print decoded_file
+        # print code_table
+        # print decoded_file
+        print "[*]Length after Hanmming decode:", len(decoded_file)
         # write output-file
         f = open(output_file_name, "w+")
         f.write(decoded_file)
         f.close()
 
     except Exception, e:
+        print "==========================="
+        print mark
+        print "+++++++++++++++++++++++++++"
         raise e
 
 
@@ -154,3 +192,5 @@ if __name__ == "__main__":
     make_code_table("hamming_table_out.txt")
     encode("hamming_table_out.txt", "huffman_out.txt", "hamming_out.txt")
     decode("hamming_table_out.txt", "hamming_out.txt", "hamming_decode_out.txt")
+    import Huffman
+    Huffman.decode("huffman_table_out.txt", "hamming_decode_out.txt", "huffman_decode_out.txt")

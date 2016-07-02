@@ -14,9 +14,9 @@ def make_code_table(input_file_name, output_file_name):
         # check, not necessary
         cnt = 0.0
         for line in list_by_freqency:
-            print line
+            # print line
             cnt += line[0]
-        print "Total frequency:", cnt, "%"
+        print "[*]Total frequency:", cnt, "%"
         # encode
         while len(list_by_freqency) > 1:
             char1 = list_by_freqency.pop()
@@ -34,8 +34,8 @@ def make_code_table(input_file_name, output_file_name):
         encode_char = list_by_freqency[0][1]
         encode_char.sort()
         # check, not necessary
-        for line in encode_char:
-            print line
+        # for line in encode_char:
+            # print line
         # write output-file
         fout = open(output_file_name, "w+")
         for line in encode_char:
@@ -69,10 +69,10 @@ def encode(code_table, input_file_name, output_file_name, mod_x):
         for i in range(num):
             encoded_file = encoded_file + "0"
         # check, not necessary
-        print code_table
-        print encoded_file
-        print "length after encode:", len(encoded_file)
-        print "mod %d:"%mod_x, num
+        # print code_table
+        # print encoded_file
+        print "[*]length after Huffman encode:", len(encoded_file)
+        # print "mod %d:"%mod_x, num
         # write output-file
         f = open(output_file_name, "w+")
         f.write(encoded_file)
@@ -142,6 +142,7 @@ def decode(code_table, input_file_name, output_file_name):
                 decoded_file = decoded_file + code_table[tmp]
                 tmp = str()
         # check, not necessary
+        print "[*]Length after Hanmming decode:", len(decoded_file)
         print decoded_file
         # write output-file
         f = open(output_file_name, "w+")
